@@ -6,16 +6,16 @@ import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import com.example.todothree.R
 
-class NewTaskDialogFragment: DialogFragment() {  // 1
+class NewTaskDialogFragment: DialogFragment() {
 
-    // 2
+
     interface NewTaskDialogListener {
         fun onDialogPositiveClick(dialog: DialogFragment, task: String)
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
-    var newTaskDialogListener: NewTaskDialogListener? = null // 3
+    var newTaskDialogListener: NewTaskDialogListener? = null
 
-    // 4
+
     companion object {
         fun newInstance(title: Int): NewTaskDialogFragment {
 
