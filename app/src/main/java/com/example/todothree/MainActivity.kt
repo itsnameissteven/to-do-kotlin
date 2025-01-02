@@ -1,6 +1,7 @@
 package com.example.todothree
 
 import CustomAdapter
+import DataManager
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -19,9 +20,10 @@ class MainActivity  : AppCompatActivity(), NewTaskDialogFragment.NewTaskDialogLi
     private var todoListItems = ArrayList<Item>()
     private var listView: ListView? = null
     private var listAdapter: CustomAdapter? = null
-
+    private var dm: DataManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        dm = DataManager(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -37,6 +39,7 @@ class MainActivity  : AppCompatActivity(), NewTaskDialogFragment.NewTaskDialogLi
         populateListView()
     }
     override fun onDialogPositiveClick(dialog: DialogFragment, task:String) {
+        dm?.insert(task)
         todoListItems.add(Item(task, todoListItems.size))
         listAdapter?.notifyDataSetChanged()
         Snackbar.make(binding.fab, "Task Added Successfully", Snackbar.LENGTH_LONG).setAction("Action", null).show()
@@ -44,6 +47,12 @@ class MainActivity  : AppCompatActivity(), NewTaskDialogFragment.NewTaskDialogLi
     override fun onDialogNegativeClick(dialog: DialogFragment) {
     }
     private fun populateListView() {
+        val cursor = dm?.selectAll()
+        while (cursor!!.moveToNext()) {
+            val id = cursor.getInt(0)
+            val name = cursor.getString(1)
+            todoListItems.add(Item(name, id))
+        }
         listAdapter = CustomAdapter(this, todoListItems)
         listView?.adapter = listAdapter
     }
