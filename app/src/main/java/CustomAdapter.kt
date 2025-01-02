@@ -15,7 +15,7 @@ class CustomAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View = convertView ?: LayoutInflater.from(context).inflate(R.layout.item, parent, false)
-
+        val dm = DataManager(context)
         // Find views in the layout
         val itemText = view.findViewById<TextView>(R.id.itemText)
         val deleteIcon = view.findViewById<ImageView>(R.id.deleteIcon)
@@ -25,6 +25,7 @@ class CustomAdapter(
 
         // Handle delete button click
         deleteIcon.setOnClickListener {
+            dm.delete(items[position].id.toString())
             items.removeAt(position)
             notifyDataSetChanged()
             Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show()
